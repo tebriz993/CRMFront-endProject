@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Customer List</title>
+    <link rel="stylesheet" href="customerList.css">
+</head>
+
+<body>
+    <div class="container">
+        <h1>Registered Users</h1>
+        <table id="userTable">
+            <thead>
+                <tr>
+                    <th>Username</th>
+                    <th>Email</th>
+                    <th>Password</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- İstifadeçilerin melumatları bura yuklenecek -->
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        function loadUsers() {
+            const users = JSON.parse(localStorage.getItem("users")) || [];
+            const tableBody = document.getElementById("userTable").getElementsByTagName("tbody")[0];
+
+            // Cədvəldəki əvvəlki setırları silirik
+            tableBody.innerHTML = '';
+
+            users.forEach((user, index) => {
+                const row = tableBody.insertRow();
+                row.insertCell(0).innerText = user.username;
+                row.insertCell(1).innerText = user.email;
+                row.insertCell(2).innerText = user.password;
+                //delete emri
+                const deleteCell = row.insertCell(3);
+                const deleteButton = document.createElement("button");
+                deleteButton.innerText = "Delete";
+                deleteButton.onclick = () => deleteUser(index);
+                deleteCell.appendChild(deleteButton);
+            });
+        }
+
+        // İstifadeçini silirik
+        function deleteUser(index) {
+            const users = JSON.parse(localStorage.getItem("users")) || [];
+            users.splice(index, 1); // İstifadəçini sil
+            localStorage.setItem("users", JSON.stringify(users)); // Yenidən saxla
+            loadUsers(); // Yeniləyir
+        }
+
+        // Sehife yuklenende istifadeçileri cedvele elave edirik
+        window.onload = loadUsers;
+    </script>
+</body>
+
+</html>
